@@ -1,8 +1,3 @@
-/*
- The declaration and assignment outside of the handler run only once!
- This helps improve performance and allows us to load and cache static data
- only on the first invocation, which helps improve performance on subsequent invocations.
-*/
 const fs = require("fs")
 const Mustache = require('mustache')
 const http = require('axios')
@@ -10,6 +5,7 @@ const aws4 = require('aws4')
 const URL = require('url')
 
 const restaurantsApiRoot = process.env.restaurants_api
+const ordersApiRoot = process.env.orders_api
 const cognitoUserPoolId = process.env.cognito_user_pool_id
 const cognitoClientId = process.env.cognito_client_id
 const awsRegion = process.env.AWS_REGION
@@ -44,7 +40,8 @@ module.exports.handler = async (event, context) => {
     cognitoClientId,
     dayOfWeek,
     restaurants,
-    searchUrl: `${restaurantsApiRoot}/search`
+    searchUrl: `${restaurantsApiRoot}/search`,
+    placeOrderUrl: ordersApiRoot
   }
   const html = Mustache.render(template, view)
   const response = {
